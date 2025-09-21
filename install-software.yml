@@ -1,70 +1,80 @@
 ---
-- name: Install software packages via Snap (explicit tasks, no unused vars)
+- name: Install and Configure Software Packages
   hosts: all
   become: true
 
   tasks:
-    - name: Ensure snapd is installed
-      apt:
-        name: snapd
+    - name: Ensure base dependencies are installed
+      ansible.builtin.apt:
+        name:
+          - snapd
+          - apt-transport-https
         state: present
         update_cache: yes
 
-    - name: "Install snap package: steam"
-      snap:
+    # --- Individual Snap Package Installations ---
+
+    - name: Install nordvpn
+      community.general.snap:
+        name: nordvpn
+        state: present
+        classic: yes
+
+    - name: Install steam
+      community.general.snap:
         name: steam
         state: present
         classic: yes
 
-    - name: Ensure i386 architecture is enabled (for 32-bit Steam support)
-      command: dpkg --add-architecture i386
+    - name: Enable i386 architecture for Steam
+      ansible.builtin.command: dpkg --add-architecture i386
       args:
         creates: /etc/dpkg/dpkg.cfg.d/multiarch
       notify: Update apt cache
 
-    - name: Install 32-bit NVIDIA driver for Steam (libnvidia-gl-580:i386)
-      apt:
-        name: libnvidia-gl-580:i386
+    - name: Install 32-bit NVIDIA drivers for Steam
+      ansible.builtin.apt:
+        name: libnvidia-gl-580:i386 # Make sure this version is correct for your driver
         state: present
 
-    - name: "Install snap package: obs-studio"
-      snap:
-        name: obs-studio
-        state: present
-
-    - name: "Install snap package: sublime-text"
-      snap:
+    - name: Install sublime-text
+      community.general.snap:
         name: sublime-text
         state: present
         classic: yes
 
-    - name: "Install snap package: vlc"
-      snap:
+    - name: Install obs-studio
+      community.general.snap:
+        name: obs-studio
+        state: present
+
+    - name: Install vlc
+      community.general.snap:
         name: vlc
         state: present
 
-    - name: "Install snap package: gimp"
-      snap:
+    - name: Install gimp
+      community.general.snap:
         name: gimp
         state: present
 
-    - name: "Install snap package: darktable"
-      snap:
+    - name: Install darktable
+      community.general.snap:
         name: darktable
         state: present
 
-    - name: "Install snap package: discord"
-      snap:
+    - name: Install discord
+      community.general.snap:
         name: discord
         state: present
 
-    - name: "Install snap package: spotify"
-      snap:
+    - name: Install spotify
+      community.general.snap:
         name: spotify
         state: present
 
+  # Handlers are only run if notified by a task
   handlers:
     - name: Update apt cache
-      apt:
+      ansible.builtin.apt:
         update_cache: yes
-

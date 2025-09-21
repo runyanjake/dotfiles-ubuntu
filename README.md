@@ -30,3 +30,22 @@ gh auth login
 ### LazyVim
 Run `nvim` once to install everything.
 
+### NordVPN
+Authenticate and configure after first-time setup.
+```
+nordvpn login
+nordvpn settings
+nordvpn set killswitch on
+nordvpn set autoconnect on
+```
+
+Common Commands
+```
+nordvpn countries
+nordvpn cities us
+nordvpn connect us
+nordvpn status
+nordvpn disconnect
+nordvpn --help
+```
+
