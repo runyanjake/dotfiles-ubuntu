@@ -1,14 +1,7 @@
+# Top level playbook for installing/updating software on Ubuntu.
+
 ---
-- name: Ubuntu Setup
-  hosts: localhost
-  connection: local
-  gather_facts: true
-  become: true
-
-  tasks:
-    - name: Include base packages installation
-      import_playbook: install-packages.yml
-
-    - name: Include LazyVim installation
-      import_playbook: install-lazyvim.yml
+- import_playbook: install-base-packages.yml
+- import_playbook: install-lazyvim.yml
+- import_playbook: install-software.yml
 

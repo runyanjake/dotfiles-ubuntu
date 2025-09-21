@@ -8,8 +8,14 @@ sudo apt install ansible
 ```
 
 ## Running 
+Run all install playbooks:
 ```
 ansible-playbook -i localhost, -c local setup-ubuntu.yml -K
+```
+
+Run just one install playbook:
+```
+ansible-playbook -i localhost, -c local install-software.yml -K
 ```
 
 ## Post Install Steps

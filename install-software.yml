@@ -1,0 +1,70 @@
+---
+- name: Install software packages via Snap (explicit tasks, no unused vars)
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Ensure snapd is installed
+      apt:
+        name: snapd
+        state: present
+        update_cache: yes
+
+    - name: "Install snap package: steam"
+      snap:
+        name: steam
+        state: present
+        classic: yes
+
+    - name: Ensure i386 architecture is enabled (for 32-bit Steam support)
+      command: dpkg --add-architecture i386
+      args:
+        creates: /etc/dpkg/dpkg.cfg.d/multiarch
+      notify: Update apt cache
+
+    - name: Install 32-bit NVIDIA driver for Steam (libnvidia-gl-580:i386)
+      apt:
+        name: libnvidia-gl-580:i386
+        state: present
+
+    - name: "Install snap package: obs-studio"
+      snap:
+        name: obs-studio
+        state: present
+
+    - name: "Install snap package: sublime-text"
+      snap:
+        name: sublime-text
+        state: present
+        classic: yes
+
+    - name: "Install snap package: vlc"
+      snap:
+        name: vlc
+        state: present
+
+    - name: "Install snap package: gimp"
+      snap:
+        name: gimp
+        state: present
+
+    - name: "Install snap package: darktable"
+      snap:
+        name: darktable
+        state: present
+
+    - name: "Install snap package: discord"
+      snap:
+        name: discord
+        state: present
+
+    - name: "Install snap package: spotify"
+      snap:
+        name: spotify
+        state: present
+
+  handlers:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
